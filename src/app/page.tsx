@@ -3,7 +3,7 @@ import Image from "next/image";
 export default function Home() {
   return (
     <>
-    <p>hello circa</p>
+    <p className="text-2xl font-bold">WORDS</p>
     </>
   );
 }
