@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 // destructuring assignment
 const {Schema} = mongoose;
 
-const conceptScheme = new Schema({
+const conceptSchema = new Schema({
   user_id: {
     type: Schema.Types.ObjectId,
     ref: "User",
@@ -34,8 +34,11 @@ const conceptScheme = new Schema({
   },
   normal_embedding : {
     type: [Number],
-    required: true
+    required: true 
+  }},
+  {
+    timestamps: true
   }
-});
+);
 
-module.exports = mongoose.model('Concept', conceptScheme)
+export default mongoose.models.User || mongoose.model("Concept", conceptSchema);

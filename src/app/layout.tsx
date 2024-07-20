@@ -16,7 +16,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} p-10 mt-12 font-normal antialiased flex flex-col items-center justify-center`}>{children}</body>
+      <body
+        className={`${inter.className} p-4 md:p-10 mt-12 font-normal antialiased`}
+      >
+        <div className="container mx-auto px-4 lg:px-0 lg:w-2/3">
+          {children}
+        </div>
+      </body>
     </html>
   );
 }
