@@ -9,7 +9,7 @@ const conceptSchema = new Schema({
     ref: "User",
     required: true,
   },
-  phrase: {
+  name: {
     type: String,
     required: true,
   },

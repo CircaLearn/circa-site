@@ -10,3 +10,4 @@ words, not just memorize them.
 * Using NLP, Circa evaluates how well you understand a word from the definition,
   and adjusts your understanding if necessary
 * Spaced repetition makes words **stick**: just remember to come back and practice!
+  
