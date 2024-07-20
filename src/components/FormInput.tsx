@@ -50,6 +50,7 @@ export default function FormInput({
         onFocus={handleFocus}
         onBlur={handleBlur}
         placeholder={placeholder}
+        autoComplete="off"
         className={`w-full p-1 border rounded ${
           internalShowValidation && !value
             ? "border-rose-500"

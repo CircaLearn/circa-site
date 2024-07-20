@@ -31,17 +31,35 @@ export default function FormRow({
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!formData.name || !formData.usage) {
       setShowValidation(true);
       return;
     }
-    onSubmit(formData);
-    if (!isEdit) {
-      setFormData({ name: "", usage: "" }); // Reset form after submission if adding a new row
+
+    try {
+        const response = await fetch('/api/add-concept/', {
+            method: "POST",
+            headers: {
+                'Content-Type': "application/json"
+            },
+            body: JSON.stringify({formData})
+        });
+
+        if (response.ok) {
+          onSubmit(formData);
+          if (!isEdit) {
+            setFormData({ name: "", usage: "" }); // Reset form after submission if adding a new row
+          }
+          setShowValidation(false); // Reset validation state after successful submission
+        } else {
+            console.error("Response NOT ok - Concept not added ")
+        }
+    } catch(error) {
+        console.error("Error adding concept", error)
     }
-    setShowValidation(false); // Reset validation state after successful submission
+
   };
 
   return (

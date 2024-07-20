@@ -81,8 +81,8 @@ export default function TicketTable() {
           <TableRow>
             <TableHead className="w-[10%]">Status</TableHead>
             <TableHead className="w-[20%]">Concept</TableHead>
-            <TableHead className="w-[48%]">Usage</TableHead>
-            <TableHead className="w-[10%] text-right">Date Added</TableHead>
+            <TableHead className="w-[45%]">Usage</TableHead>
+            <TableHead className="w-[13%] text-right">Date Added</TableHead>
             <TableHead className="w-[12%] text-right">Action</TableHead>
           </TableRow>
         </TableHeader>
