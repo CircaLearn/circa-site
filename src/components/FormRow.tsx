@@ -3,6 +3,7 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
 import { TableRow, TableCell } from "@/components/ui/table";
 import { FaCircle } from "react-icons/fa";
+import FormInput from "./FormInput";
 
 type FormData = {
   name: string;
@@ -23,6 +24,7 @@ export default function FormRow({
   dateAdded = "Today",
 }: FormRowProps) {
   const [formData, setFormData] = useState<FormData>(initialData);
+  const [showValidation, setShowValidation] = useState<boolean>(false);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -31,10 +33,15 @@ export default function FormRow({
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!formData.name || !formData.usage) {
+      setShowValidation(true);
+      return;
+    }
     onSubmit(formData);
     if (!isEdit) {
       setFormData({ name: "", usage: "" }); // Reset form after submission if adding a new row
     }
+    setShowValidation(false); // Reset validation state after successful submission
   };
 
   return (
@@ -43,25 +50,21 @@ export default function FormRow({
         <FaCircle className="text-xl text-emerald-300 opacity-50" />
       </TableCell>
       <TableCell>
-        <input
-          type="text"
+        <FormInput
           name="name"
           value={formData.name}
           onChange={handleChange}
           placeholder="Add concept..."
-          className="w-full p-1 border rounded"
-          autoComplete="off"
+          showValidation={showValidation}
         />
       </TableCell>
       <TableCell>
-        <input
-          type="text"
+        <FormInput
           name="usage"
           value={formData.usage}
           onChange={handleChange}
           placeholder="Enter usage..."
-          className="w-full p-1 border rounded"
-          autoComplete="off"
+          showValidation={showValidation}
         />
       </TableCell>
       <TableCell className="text-right">
