@@ -39,7 +39,7 @@ export default function FormRow({
     }
 
     try {
-        const response = await fetch('/api/add-concept/', {
+        const response = await fetch('/api/concepts/', {
             method: "POST",
             headers: {
                 'Content-Type': "application/json"
