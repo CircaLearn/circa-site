@@ -26,11 +26,11 @@ const USER_id = "60b8d6e1e1b8f30d6c8e6f59"; // Example user ID, replace with act
 export default function TicketTable() {
   const [rows, setRows] = useState<RowData[]>([]);
   const [editingRowIndex, setEditingRowIndex] = useState<number | null>(null);
+  const [lastUpdated, setLastUpdated] = useState<string>("");
 
   useEffect(() => {
     const fetchConcepts = async () => {
       const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-      console.log("API URL:", apiUrl); // Log to verify API_URL
 
       if (!apiUrl) {
         console.error("API_URL is not defined in the environment variables.");
@@ -39,7 +39,6 @@ export default function TicketTable() {
 
       try {
         const response = await fetch(`${apiUrl}/concepts`);
-        console.log("Fetching concepts from:", `${apiUrl}/concepts`); // Log the fetch URL
         if (response.ok) {
           const data = await response.json();
           console.log("Fetched data:", data); // Log to verify data fetched
@@ -52,6 +51,7 @@ export default function TicketTable() {
               dateAdded: new Date(concept.date_created).toLocaleDateString(),
             }))
           );
+          updateLastUpdatedTime();
         } else {
           console.error("Failed to fetch concepts");
         }
@@ -65,6 +65,7 @@ export default function TicketTable() {
 
   const handleAddRow = (newRow: RowData) => {
     setRows([...rows, newRow]);
+    updateLastUpdatedTime();
   };
 
   const handleUpdateRow = (updatedRow: RowData) => {
@@ -73,7 +74,17 @@ export default function TicketTable() {
       updatedRows[editingRowIndex] = updatedRow;
       setRows(updatedRows);
       setEditingRowIndex(null);
+      updateLastUpdatedTime();
     }
+  };
+
+  const updateLastUpdatedTime = () => {
+    const currentTime = new Date().toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    });
+    setLastUpdated(currentTime);
   };
 
   return (
@@ -131,7 +142,7 @@ export default function TicketTable() {
             )
           )}
         </TableBody>
-        <TableCaption>Last Updated: 12:00 pm</TableCaption>
+        <TableCaption>Last Updated: {lastUpdated}</TableCaption>
       </Table>
     </>
   );
