@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Table,
   TableBody,
@@ -13,51 +13,64 @@ import {
 import { FaCircle } from "react-icons/fa";
 import FormRow from "./FormRow";
 
-type FormData = {
-  name: string;
-  usage: string;
-};
-
 type RowData = {
-  status: string;
+  id: string;
+  user_id: string;
   name: string;
   usage: string;
   dateAdded: string;
 };
 
-export default function TicketTable() {
-  const [rows, setRows] = useState<RowData[]>([
-    {
-      status: "New",
-      name: "Delineate",
-      usage: "Describe or portray precisely; distinguish",
-      dateAdded: "06/10/2024",
-    },
-  ]);
+const USER_id = "60b8d6e1e1b8f30d6c8e6f59"; // Example user ID, replace with actual user ID
 
+export default function TicketTable() {
+  const [rows, setRows] = useState<RowData[]>([]);
   const [editingRowIndex, setEditingRowIndex] = useState<number | null>(null);
 
-  const handleAddRow = (formData: FormData) => {
-    const newRow: RowData = {
-      status: "New",
-      name: formData.name,
-      usage: formData.usage,
-      dateAdded: "Today",
+  useEffect(() => {
+    const fetchConcepts = async () => {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      console.log("API URL:", apiUrl); // Log to verify API_URL
+
+      if (!apiUrl) {
+        console.error("API_URL is not defined in the environment variables.");
+        return;
+      }
+
+      try {
+        const response = await fetch(`${apiUrl}/concepts`);
+        console.log("Fetching concepts from:", `${apiUrl}/concepts`); // Log the fetch URL
+        if (response.ok) {
+          const data = await response.json();
+          console.log("Fetched data:", data); // Log to verify data fetched
+          setRows(
+            data.map((concept: any) => ({
+              id: concept.id,
+              user_id: concept.user_id,
+              name: concept.name,
+              usage: concept.usage,
+              dateAdded: new Date(concept.date_created).toLocaleDateString(),
+            }))
+          );
+        } else {
+          console.error("Failed to fetch concepts");
+        }
+      } catch (error) {
+        console.error("Error fetching concepts", error);
+      }
     };
+
+    fetchConcepts();
+  }, []); // Empty dependency array ensures this runs once when the component mounts
+
+  const handleAddRow = (newRow: RowData) => {
     setRows([...rows, newRow]);
   };
 
-  const handleEditRow = (index: number) => {
-    setEditingRowIndex(index);
-  };
-
-  const handleUpdateRow = (formData: FormData) => {
+  const handleUpdateRow = (updatedRow: RowData) => {
     if (editingRowIndex !== null) {
       const updatedRows = [...rows];
-      updatedRows[editingRowIndex] = {
-        ...updatedRows[editingRowIndex],
-        ...formData,
-      };
+      updatedRows[editingRowIndex] = updatedRow;
       setRows(updatedRows);
       setEditingRowIndex(null);
     }
@@ -91,14 +104,15 @@ export default function TicketTable() {
           {rows.map((row, index) =>
             editingRowIndex === index ? (
               <FormRow
-                key={index}
+                key={row.id}
                 onSubmit={handleUpdateRow}
                 initialData={{ name: row.name, usage: row.usage }}
                 isEdit={true}
                 dateAdded={row.dateAdded}
+                id={row.id}
               />
             ) : (
-              <TableRow key={index}>
+              <TableRow key={row.id}>
                 <TableCell className="text-xl text-amber-300 opacity-50">
                   <FaCircle />
                 </TableCell>
@@ -108,7 +122,7 @@ export default function TicketTable() {
                 <TableCell className="text-right">
                   <button
                     className="bg-amber-500 text-white px-2 py-1 rounded"
-                    onClick={() => handleEditRow(index)}
+                    onClick={() => setEditingRowIndex(index)}
                   >
                     Edit
                   </button>
