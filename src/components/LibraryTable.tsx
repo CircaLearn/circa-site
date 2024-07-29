@@ -5,13 +5,12 @@ import {
   Table,
   TableBody,
   TableCaption,
-  TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { FaCircle } from "react-icons/fa";
 import FormRow from "./FormRow";
+import ConceptRow from "./ConceptRow";
 
 type RowData = {
   id: string;
@@ -21,47 +20,45 @@ type RowData = {
   dateAdded: string;
 };
 
-const USER_id = "60b8d6e1e1b8f30d6c8e6f59"; // Example user ID, replace with actual user ID
-
-export default function TicketTable() {
+export default function LibraryTable() {
   const [rows, setRows] = useState<RowData[]>([]);
   const [editingRowIndex, setEditingRowIndex] = useState<number | null>(null);
   const [lastUpdated, setLastUpdated] = useState<string>("");
 
+  const fetchConcepts = async () => {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
+    if (!apiUrl) {
+      console.error("API_URL is not defined in the environment variables.");
+      return;
+    }
+
+    try {
+      const response = await fetch(`${apiUrl}/concepts`);
+      if (response.ok) {
+        const data = await response.json(); // on dev, data is fetched twice due to React strictmode
+        setRows(
+          data.map((concept: any) => ({
+            id: concept.id,
+            user_id: concept.user_id,
+            name: concept.name,
+            usage: concept.usage,
+            dateAdded: new Date(concept.date_created).toLocaleDateString(),
+          }))
+        );
+        updateLastUpdatedTime();
+      } else {
+        console.error("Failed to fetch concepts");
+      }
+    } catch (error) {
+      console.error("Error fetching concepts", error);
+    }
+  };
+
   useEffect(() => {
-    const fetchConcepts = async () => {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+    fetchConcepts()
+  }, []) 
 
-      if (!apiUrl) {
-        console.error("API_URL is not defined in the environment variables.");
-        return;
-      }
-
-      try {
-        const response = await fetch(`${apiUrl}/concepts`);
-        if (response.ok) {
-          const data = await response.json();
-          console.log("Fetched data:", data); // Log to verify data fetched
-          setRows(
-            data.map((concept: any) => ({
-              id: concept.id,
-              user_id: concept.user_id,
-              name: concept.name,
-              usage: concept.usage,
-              dateAdded: new Date(concept.date_created).toLocaleDateString(),
-            }))
-          );
-          updateLastUpdatedTime();
-        } else {
-          console.error("Failed to fetch concepts");
-        }
-      } catch (error) {
-        console.error("Error fetching concepts", error);
-      }
-    };
-
-    fetchConcepts();
-  }, []); // Empty dependency array ensures this runs once when the component mounts
 
   const handleAddRow = (newRow: RowData) => {
     setRows([...rows, newRow]);
@@ -70,7 +67,7 @@ export default function TicketTable() {
 
   const handleUpdateRow = (updatedRow: RowData) => {
     if (editingRowIndex !== null) {
-      const updatedRows = [...rows];
+      const updatedRows = [...rows]; // creates shallow copy
       updatedRows[editingRowIndex] = updatedRow;
       setRows(updatedRows);
       setEditingRowIndex(null);
@@ -111,7 +108,9 @@ export default function TicketTable() {
           </TableRow>
         </TableHeader>
         <TableBody>
+          {/* top row for adding new concepts */}
           <FormRow onSubmit={handleAddRow} />
+
           {rows.map((row, index) =>
             editingRowIndex === index ? (
               <FormRow
@@ -123,26 +122,18 @@ export default function TicketTable() {
                 id={row.id}
               />
             ) : (
-              <TableRow key={row.id}>
-                <TableCell className="text-xl text-amber-300 opacity-50">
-                  <FaCircle />
-                </TableCell>
-                <TableCell>{row.name}</TableCell>
-                <TableCell>{row.usage}</TableCell>
-                <TableCell className="text-right">{row.dateAdded}</TableCell>
-                <TableCell className="text-right">
-                  <button
-                    className="bg-amber-500 text-white px-2 py-1 rounded"
-                    onClick={() => setEditingRowIndex(index)}
-                  >
-                    Edit
-                  </button>
-                </TableCell>
-              </TableRow>
+              <ConceptRow
+                key={row.id}
+                row={row}
+                index={index}
+                setEditingRowIndex={setEditingRowIndex}
+              />
             )
           )}
         </TableBody>
-        <TableCaption>Last Updated: {lastUpdated}</TableCaption>
+        <TableCaption>
+          {lastUpdated ? `Last Updated: ${lastUpdated}` : ""}
+        </TableCaption>
       </Table>
     </>
   );
