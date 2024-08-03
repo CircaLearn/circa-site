@@ -17,7 +17,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.className} p-4 md:p-10 mt-12 font-normal antialiased`}
+        className={`${inter.className} p-4 md:p-10 mt-12 font-normal text-slate-800 antialiased`}
       >
         <div className="container mx-auto px-4 lg:px-0 lg:w-2/3">
           {children}

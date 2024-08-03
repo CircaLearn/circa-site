@@ -73,6 +73,7 @@ export default function LibraryTable({
         </TableHeader>
         <TableBody>
           {/* top row for adding new concepts */}
+          {/* ConceptRow is a dynamic component that will be rendered based on the purpose prop (add, edit, or display) */}
           <ConceptRow
             row={{
               id: "",

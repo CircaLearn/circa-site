@@ -36,6 +36,10 @@ export default function ConceptRow({
       setShowValidation(true);
       return;
     }
+    if (formData.name == row.name && formData.usage == row.usage) {
+      onCancel?.();
+      return;
+    }
 
     const apiUrl = process.env.NEXT_PUBLIC_API_URL;
     if (!apiUrl) {
@@ -92,6 +96,7 @@ export default function ConceptRow({
     setFormData({ name: row.name || "", usage: row.usage || "" }); // Reset form data on cancel
   };
 
+  // ConceptRow just for displaying
   if (purpose === "display") {
     return (
       <TableRow key={row.id}>
@@ -105,7 +110,7 @@ export default function ConceptRow({
         </TableCell>
         <TableCell className="text-right flex justify-end space-x-2">
           <button
-            className="bg-amber-500 text-white py-2 rounded-2xl flex items-center justify-center w-16 h-8"
+            className="py-2 flex items-center justify-center w-16 h-8"
             onClick={() => onSubmit({ ...row, id: row.id })}
           >
             <FaEdit />
@@ -147,13 +152,13 @@ export default function ConceptRow({
         <form onSubmit={handleSubmit} className="flex">
           <button
             type="submit"
-            className="bg-blue-500 text-white p-2 rounded-2xl flex items-center justify-center w-8 h-8"
+            className="p-2 flex items-center justify-center w-8 h-8"
           >
             <FaCheck />
           </button>
           <button
             type="button"
-            className="bg-gray-500 text-white p-2 rounded-2xl flex items-center justify-center w-8 h-8"
+            className="p-2 flex items-center justify-center w-8 h-8"
             onClick={handleCancel}
           >
             <FaTimes />
