@@ -20,10 +20,6 @@ export default function FormInput({
   const [internalShowValidation, setInternalShowValidation] =
     useState(showValidation);
 
- // showValidation is for form validation, for example making sure all fields 
- // are filled in the library table
- // internalShowValidation is important for the effect that focusing removes the
- // error highlighting temporarily
   useEffect(() => {
     setInternalShowValidation(showValidation);
   }, [showValidation]);
@@ -32,8 +28,6 @@ export default function FormInput({
     setInternalShowValidation(false);
   };
 
-  // resets validation when you focus away, so resubmitting after hover 
-  // still causes error highlighting
   const handleBlur = () => {
     if (showValidation) {
       setInternalShowValidation(true);

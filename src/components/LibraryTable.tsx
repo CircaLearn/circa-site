@@ -5,32 +5,38 @@ import {
   Table,
   TableBody,
   TableCaption,
-  TableHead,
   TableHeader,
+  TableHead,
   TableRow,
 } from "@/components/ui/table";
-import FormRow from "./FormRow";
 import ConceptRow from "./ConceptRow";
-import { RowData, FetchConceptsResponse } from "@/lib/types";
+import { Concept } from "@/lib/types";
 
-export default function LibraryTable({ data, receivedTime }: FetchConceptsResponse) {
-  const [rows, setRows] = useState<RowData[]>(data ? data : []);
+export type FetchConceptsResponse = {
+  data: Concept[] | null;
+  receivedTime: string | null;
+};
+
+export default function LibraryTable({
+  data,
+  receivedTime,
+}: FetchConceptsResponse) {
+  const [rows, setRows] = useState<Concept[]>(data ? data : []);
   const [editingRowIndex, setEditingRowIndex] = useState<number | null>(null);
-  const [lastUpdated, setLastUpdated] = useState<string>(receivedTime ? receivedTime : "");
+  const [lastUpdated, setLastUpdated] = useState<string>(
+    receivedTime ? receivedTime : ""
+  );
 
-  const handleAddRow = (newRow: RowData) => {
-    setRows([...rows, newRow]);
-    updateLastUpdatedTime();
-  };
-
-  const handleUpdateRow = (updatedRow: RowData) => {
+  const handleAddOrUpdateRow = (newRow: Concept) => {
     if (editingRowIndex !== null) {
-      const updatedRows = [...rows]; // creates shallow copy
-      updatedRows[editingRowIndex] = updatedRow;
+      const updatedRows = [...rows];
+      updatedRows[editingRowIndex] = newRow;
       setRows(updatedRows);
       setEditingRowIndex(null);
-      updateLastUpdatedTime();
+    } else {
+      setRows([...rows, newRow]);
     }
+    updateLastUpdatedTime();
   };
 
   const updateLastUpdatedTime = () => {
@@ -67,24 +73,35 @@ export default function LibraryTable({ data, receivedTime }: FetchConceptsRespon
         </TableHeader>
         <TableBody>
           {/* top row for adding new concepts */}
-          <FormRow onSubmit={handleAddRow} />
+          <ConceptRow
+            row={{
+              id: "",
+              user_id: "",
+              name: "",
+              usage: "",
+              date_created: new Date(),
+              progress: 0,
+              normalized_embedding: [],
+            }}
+            purpose="add"
+            onSubmit={handleAddOrUpdateRow}
+          />
 
           {rows.map((row, index) =>
             editingRowIndex === index ? (
-              <FormRow
+              <ConceptRow
                 key={row.id}
-                onSubmit={handleUpdateRow}
-                initialData={{ name: row.name, usage: row.usage }}
-                isEdit={true}
-                dateAdded={row.dateAdded}
-                id={row.id}
+                row={row}
+                purpose="edit"
+                onSubmit={handleAddOrUpdateRow}
+                onCancel={() => setEditingRowIndex(null)}
               />
             ) : (
               <ConceptRow
                 key={row.id}
                 row={row}
-                index={index}
-                setEditingRowIndex={setEditingRowIndex}
+                purpose="display"
+                onSubmit={() => setEditingRowIndex(index)}
               />
             )
           )}

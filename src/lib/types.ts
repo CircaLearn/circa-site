@@ -1,12 +1,10 @@
-export type RowData = {
+export type Concept = {
   id: string;
   user_id: string;
   name: string;
   usage: string;
-  dateAdded: string;
-};
-
-export type FetchConceptsResponse = {
-  data: RowData[] | null;
-  receivedTime: string | null;
+  date_created: Date;
+  last_seen?: Date;
+  progress: number;
+  normalized_embedding: number[];
 };
