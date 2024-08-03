@@ -1,4 +1,4 @@
-export default function SkeletonTableLoader() {
+export default function SkeletonTable() {
   return (
     <div className="w-full px-4">
       {/* make 5 rows */}

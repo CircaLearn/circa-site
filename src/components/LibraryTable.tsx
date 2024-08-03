@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Table,
   TableBody,
@@ -11,54 +11,12 @@ import {
 } from "@/components/ui/table";
 import FormRow from "./FormRow";
 import ConceptRow from "./ConceptRow";
+import { RowData, FetchConceptsResponse } from "@/lib/types";
 
-type RowData = {
-  id: string;
-  user_id: string;
-  name: string;
-  usage: string;
-  dateAdded: string;
-};
-
-export default function LibraryTable() {
-  const [rows, setRows] = useState<RowData[]>([]);
+export default function LibraryTable({ data, receivedTime }: FetchConceptsResponse) {
+  const [rows, setRows] = useState<RowData[]>(data ? data : []);
   const [editingRowIndex, setEditingRowIndex] = useState<number | null>(null);
-  const [lastUpdated, setLastUpdated] = useState<string>("");
-
-  const fetchConcepts = async () => {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-
-    if (!apiUrl) {
-      console.error("API_URL is not defined in the environment variables.");
-      return;
-    }
-
-    try {
-      const response = await fetch(`${apiUrl}/concepts`);
-      if (response.ok) {
-        const data = await response.json(); // on dev, data is fetched twice due to React strictmode
-        setRows(
-          data.map((concept: any) => ({
-            id: concept.id,
-            user_id: concept.user_id,
-            name: concept.name,
-            usage: concept.usage,
-            dateAdded: new Date(concept.date_created).toLocaleDateString(),
-          }))
-        );
-        updateLastUpdatedTime();
-      } else {
-        console.error("Failed to fetch concepts");
-      }
-    } catch (error) {
-      console.error("Error fetching concepts", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchConcepts()
-  }, []) 
-
+  const [lastUpdated, setLastUpdated] = useState<string>(receivedTime ? receivedTime : "");
 
   const handleAddRow = (newRow: RowData) => {
     setRows([...rows, newRow]);
