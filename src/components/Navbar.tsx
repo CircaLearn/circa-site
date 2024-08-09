@@ -1,23 +1,6 @@
-"use client";
-
-import { useState, useEffect } from "react";
 import Link from "next/link";
 
 export default function Navbar() {
-  const [isScrolled, setIsScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 0);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-
   return (
     <div className="sticky top-0 z-50">
       <div
@@ -33,17 +16,12 @@ export default function Navbar() {
             </Link>
           </div>
           <div>
-            <Link href="/library" className="text-white font-semibold">
-              Sign Up
+            <Link href="/login" className="text-white font-semibold">
+              Log In
             </Link>
           </div>
         </div>
       </div>
-      <div
-        className={`w-full h-6 bg-gradient-to-b from-sky-500 to-transparent ${
-          isScrolled ? "opacity-0" : "opacity-100"
-        } transition-opacity duration-300`}
-      ></div>
     </div>
   );
 };

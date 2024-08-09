@@ -29,7 +29,7 @@ export default function FormInput({
   };
 
   const handleBlur = () => {
-    if (showValidation) {
+    if (showValidation && value === "") {
       setInternalShowValidation(true);
     }
   };
