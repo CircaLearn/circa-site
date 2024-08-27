@@ -4,10 +4,10 @@ import LibraryTable from "@/components/LibraryTable";
 import SkeletonTable from "@/components/SkeletonTable";
 import fetchConcepts from "@/lib/fetchConcepts";
 import { useEffect, useState } from "react";
-import { RowData } from "@/lib/types";
+import { Concept } from "@/lib/types";
 
 export default function Page() {
-  const [data, setData] = useState<RowData[] | null>(null);
+  const [data, setData] = useState<Concept[] | null>(null); // is this the right type?
   const [receivedTime, setReceivedTime] = useState<string | null>(null);
 
   useEffect(() => {

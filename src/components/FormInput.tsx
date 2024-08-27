@@ -6,6 +6,7 @@ type FormInputProps = {
   name: string;
   value: string;
   placeholder: string;
+  type?: string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   showValidation: boolean;
 };
@@ -14,6 +15,7 @@ export default function FormInput({
   name,
   value,
   placeholder,
+  type = "text",
   onChange,
   showValidation,
 }: FormInputProps) {
@@ -37,7 +39,7 @@ export default function FormInput({
   return (
     <div className="relative">
       <input
-        type="text"
+        type={type}
         name={name}
         value={value}
         onChange={onChange}
