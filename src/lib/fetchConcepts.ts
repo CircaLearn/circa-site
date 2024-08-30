@@ -14,7 +14,9 @@ export default async function fetchConcepts(): Promise<FetchConceptsResponse> {
   }
 
   try {
-    const response = await fetch(`${apiUrl}/concepts`);
+    const response = await fetch(`${apiUrl}/concepts`, {
+      credentials: "include",
+    });
     if (response.ok) {
       let data: Concept[] = await response.json(); // on dev, data is fetched twice due to React strictmode
 

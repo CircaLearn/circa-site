@@ -64,6 +64,7 @@ export default function ConceptRow({
           name: formData.name,
           usage: formData.usage,
         }),
+        credentials: "include",
       });
 
       if (response.ok) {
