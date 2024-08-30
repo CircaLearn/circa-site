@@ -13,6 +13,11 @@ words, not just memorize them.
   practice!
 
 ## Development/Usage
+#### Initially:
+* Download pnpm if you don't already have it installed with `npm install -g pnpm`
+* Install dependencies using `pnpm install`
+
+#### Each time:
 * Begin the server with `pnpm dev`
 * To enable database interactions, the backend server must be running
   concurrently and the IP address of connection configured in MongoDB Atlas
