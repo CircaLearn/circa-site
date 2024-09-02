@@ -40,10 +40,11 @@ export default function LoginForm({ className }: { className?: string }) {
         method: "POST",
         body: formData,
         credentials: "include", // Important: this ensures cookies are sent
+        // on a server-side component, you would use next-header headers to send
+        // cookies 
       });
 
       if (response.ok) {
-        console.log("Login successful! Cookie set on server-side.");
         router.push("/");
       } else {
         console.error("Login failed: ", response.statusText);

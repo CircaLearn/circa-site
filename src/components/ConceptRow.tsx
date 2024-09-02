@@ -1,6 +1,7 @@
 import { useState, ChangeEvent, FormEvent } from "react";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { FaCircle, FaEdit, FaCheck, FaTimes } from "react-icons/fa";
+import { useRouter } from "next/navigation";
 import { Concept } from "@/lib/types";
 import FormInput from "./FormInput";
 
@@ -11,14 +12,13 @@ type ConceptRowProps = {
   onCancel?: () => void;
 };
 
-const USER_ID = "60b8d6e1e1b8f30d6c8e6f59"; // Example user ID for testing
-
 export default function ConceptRow({
   row,
   purpose,
   onSubmit,
   onCancel,
 }: ConceptRowProps) {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     name: purpose === "add" ? "" : row.name || "",
     usage: purpose === "add" ? "" : row.usage || "",
@@ -60,7 +60,6 @@ export default function ConceptRow({
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          user_id: USER_ID,
           name: formData.name,
           usage: formData.usage,
         }),
@@ -85,6 +84,9 @@ export default function ConceptRow({
         }
       } else {
         console.error("Response Failed - Concept Not Added/Updated");
+        // Their probably not signed in 
+        // TODO: Gracefully handle error with some flash message
+        router.push("/login");
       }
     } catch (error) {
       console.error("Error adding/updating concept", error);
