@@ -21,4 +21,6 @@ words, not just memorize them.
 * Begin the server with `pnpm dev`
 * To enable database interactions, the backend server must be running
   concurrently and the IP address of connection configured in MongoDB Atlas
+* To enable cookies & login sessions, visit the frontend at
+  http://127.0.0.1:3000, not localhost
   
