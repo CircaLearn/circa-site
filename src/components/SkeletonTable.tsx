@@ -9,7 +9,7 @@ import {
 export default function SkeletonTable() {
   return (
     <>
-      <div className="flex flex-row gap-4 mt-4 mb-1">
+      {/* <div className="flex flex-row gap-4 mt-4 mb-1">
         <div className="rounded-3xl bg-slate-500 bg-opacity-25 px-2 py-1 text-sm shimmer">
           New
         </div>
@@ -19,7 +19,7 @@ export default function SkeletonTable() {
         <div className="rounded-3xl bg-slate-500 bg-opacity-25 px-2 py-1 text-sm shimmer">
           Mastered
         </div>
-      </div>
+      </div> */}
       <Table>
         <TableHeader>
           <TableRow>

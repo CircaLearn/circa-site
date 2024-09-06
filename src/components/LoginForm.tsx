@@ -46,6 +46,7 @@ export default function LoginForm({ className }: { className?: string }) {
 
       if (response.ok) {
         router.push("/");
+        router.refresh(); // may be important to clear cache for middleware
       } else {
         console.error("Login failed: ", response.statusText);
       }

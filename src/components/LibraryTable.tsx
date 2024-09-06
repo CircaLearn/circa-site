@@ -50,7 +50,8 @@ export default function LibraryTable({
 
   return (
     <>
-      <div className="flex flex-row gap-4 mt-4 mb-1">
+    {/* To be added later: select status */}
+      {/* <div className="flex flex-row gap-4 mt-4 mb-1">
         <div className="rounded-3xl bg-slate-500 bg-opacity-25 px-2 py-1 text-sm">
           New
         </div>
@@ -60,7 +61,7 @@ export default function LibraryTable({
         <div className="rounded-3xl bg-slate-500 bg-opacity-25 px-2 py-1 text-sm">
           Mastered
         </div>
-      </div>
+      </div> */}
       <Table>
         <TableHeader>
           <TableRow>

@@ -13,6 +13,7 @@ export default function LogoutButton() {
       });
       if (response.ok) {
         router.push("/");
+        router.refresh(); // may be important to clear cache for middleware
       }
     } catch (error) {
       console.log("Failed to logout" + error);
